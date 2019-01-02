@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>预约信息</title>
+    <link rel="icon" href="../../assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../assets/common.css" media="all">
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-form-item" style="margin-top: 10px">
+        <div class="layui-inline">
+            <label class="layui-form-label">会议主题</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <input type="text"  id="departmentName" required lay-verify="required" placeholder="请输入会议主题" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn  layui-btn-normal" id="searchDataBtn">
+                <i class="layui-icon layui-icon-search"></i> 搜索
+            </button>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline" style="width: 200px;">
+               <button class="layui-btn" id="departmentAddBtn">
+                <i class="layui-icon">&#xe608;</i> 预约
+            </button>
+            </div>
+        </div>
+     </div>
+     
+	<div class="layui-tab-item layui-show">
+		<div class="layui-row">
+		 <div class="layui-col-md4">
+	 		<div  id="test1"> </div>
+		 </div>
+		 <div class="layui-col-md6">
+			   你的内容 3/12
+		 </div>
+	</div>
+	
+</div>
+        
+ 
+<!-- js 部分-->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/common.js"></script>
+<script type="text/javascript" src="../../assets/module/laydate.js"></script>
+<script type="text/javascript">
+layui.use(['element', 'laydate'], function(){
+	 var element = layui.element;
+	 var laydate = layui.laydate
+	 //直接嵌套显示
+	 laydate.render({
+	   elem: '#test1',
+	   theme: '#7AC5CD',
+	   position: 'static',
+	   showBottom: false,
+	   mark: {
+		    '2018-12-31': '' //每年的日期
+		    ,'0-0-10': '工资' //每月某天
+		    ,'0-0-15': '月中'
+		    ,'2017-8-15': '' //如果为空字符，则默认显示数字+徽章
+		    ,'2099-10-14': '呵呵'
+		 },
+	  change: function(value, date){
+		alert('你选择的日期是：' + value + '\n\n获得的对象是' + JSON.stringify(date));
+	  }
+	 });
+	  
+})
+</script>
+</body>
+</html>
