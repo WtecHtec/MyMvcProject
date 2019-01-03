@@ -34,13 +34,13 @@ public class DepartmentController  extends BaseController {
     @PostMapping("/insertDepartment")
     public JsonResult insertDepartment (Department pram) {
         log.info("添加部门信息");
-        pram.setCreateId(String.valueOf(getLoginUserId()));
+        pram.setCreateId(getLoginUserName());
         return departmentService.insertDepartment(pram);
     }
 
     // 查询所有部门 ， 分页显示
     @RequestMapping(value="/pageDepartment", method = RequestMethod.POST)
-    public PageResult<Department>  pageDepartment(Integer page, Integer limit,DepartmentRequest pram) {
+    public PageResult<Department>  pageDepartment(Integer page, Integer limit,Department pram) {
     	log.info("所有部门，分页显示");
     	 if (page == null) {
              page = 0;
@@ -48,16 +48,23 @@ public class DepartmentController  extends BaseController {
          if (limit == null) {
              limit = 10;
          }
-    	// 设置分页
-    	Page<Department> departmentPage = new Page<>(page, limit);
-    	EntityWrapper<Department> wrapper = new EntityWrapper<>();
-    	if (pram.getDepartmentName() != null && !"".equals(pram.getDepartmentName())) {
-    		wrapper.like("department_name", pram.getDepartmentName());
-    	}
-    	departmentService.selectPage(departmentPage, wrapper);
-    	List<Department> departmentList =  new ArrayList<>();
-    	departmentList = departmentPage.getRecords();
-         
+//    	// 设置分页
+//    	Page<Department> departmentPage = new Page<>(page, limit);
+//    	EntityWrapper<Department> wrapper = new EntityWrapper<>();
+//    	if (pram.getDepartmentName() != null && !"".equals(pram.getDepartmentName())) {
+//    		wrapper.like("department_name", pram.getDepartmentName());
+//    	}
+//    	departmentService.selectPage(departmentPage, wrapper);
+//    	List<Department> departmentList =  new ArrayList<>();
+//    	departmentList = departmentPage.getRecords();
+         // 设置分页
+         Page<Department> departmentPage = new Page<>(page, limit);
+         // 设置数据
+        departmentPage.setRecords(departmentService.getPageDapartmens(departmentPage, pram));
+        List<Department> departmentList =  new ArrayList<>();
+        // 获取数据
+        departmentList = departmentPage.getRecords();
+        // 返数据
     	return  new PageResult<>(departmentList, departmentPage.getTotal());
     }
     
@@ -65,7 +72,7 @@ public class DepartmentController  extends BaseController {
     @RequestMapping(value="/editDepartment", method = RequestMethod.POST)
     public JsonResult editDepartment(Department pram) {
     	log.info("修改部门信息");
-    	pram.setUpdateId(String.valueOf(getLoginUserId()));
+    	pram.setUpdateId(getLoginUserName());
     	return departmentService.editDepartment(pram);
     }
     // 删除部门

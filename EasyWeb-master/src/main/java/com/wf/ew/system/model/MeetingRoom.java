@@ -5,20 +5,22 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
-@TableName("equipment")
-public class Equipment {
-	   @TableId
-	   private Integer id;
-	   
-	   private  String  equipmentName;
-
-	   private Date createTime;
-
-	   private  String createId;
-
-	   private Date updateTime;
-
-	   private  String updateId;
+@TableName("meeting_room")
+public class MeetingRoom {
+	@TableId
+	private Integer id;
+	
+	private String  meetingRoomName;
+	
+	private Integer meetingRoomPeoples;
+	
+	private Date createTime;
+	
+	private  String createId;
+	
+	private Date updateTime;
+	
+	private  String updateId;
 
 	public Integer getId() {
 		return id;
@@ -28,12 +30,20 @@ public class Equipment {
 		this.id = id;
 	}
 
-	public String getEquipmentName() {
-		return equipmentName;
+	public String getMeetingRoomName() {
+		return meetingRoomName;
 	}
 
-	public void setEquipmentName(String equipmentName) {
-		this.equipmentName = equipmentName;
+	public void setMeetingRoomName(String meetingRoomName) {
+		this.meetingRoomName = meetingRoomName;
+	}
+
+	public Integer getMeetingRoomPeoples() {
+		return meetingRoomPeoples;
+	}
+
+	public void setMeetingRoomPeoples(Integer meetingRoomPeoples) {
+		this.meetingRoomPeoples = meetingRoomPeoples;
 	}
 
 	public Date getCreateTime() {
@@ -67,6 +77,7 @@ public class Equipment {
 	public void setUpdateId(String updateId) {
 		this.updateId = updateId;
 	}
-
-
+	
+	
+	
 }

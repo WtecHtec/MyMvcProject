@@ -11,6 +11,47 @@
     <link rel="stylesheet" href="../../assets/common.css" media="all">
 </head>
 <body>
+<div class="layui-container">
+    <div class="layui-form-item" style="margin-top: 10px">
+
+     <!--    <div class="layui-inline">
+            <label class="layui-form-label">设备名称</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <input type="text"  id="departmentName" required lay-verify="required" placeholder="请输入设备名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn  layui-btn-normal" id="searchDataBtn">
+                <i class="layui-icon layui-icon-search"></i> 搜索
+            </button>
+        </div> -->
+        <div class="layui-inline">
+            <button class="layui-btn" id="meetingRoomAddBtn">
+                <i class="layui-icon">&#xe608;</i> 添加
+            </button>
+        </div>
+
+	 <table class="layui-table" id="meetingRoomTable" lay-filter="meetingRoomTable"></table>
+	 
+    </div>
+</div>
+
+<!-- js 部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/common.js"></script>
+<script type="text/javascript">
+    layui.use(['form','layer','admin','jquery', 'table'], function () {
+    	var $ = layui.jquery
+        var admin = layui.admin
+        var form = layui.form
+        var table = layui.table
+        
+        // 添加按钮操作
+        $('#meetingRoomAddBtn').click(function(){
+        	location.replace('meetingroomAdd.html');
+        })
+    })
+</script>
 
 </body>
 </html>

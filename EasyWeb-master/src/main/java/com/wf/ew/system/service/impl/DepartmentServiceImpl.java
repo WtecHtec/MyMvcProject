@@ -1,5 +1,6 @@
 package com.wf.ew.system.service.impl;
 
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wf.ew.common.JsonResult;
 import com.wf.ew.system.dao.DepartmentMapper;
@@ -18,8 +19,8 @@ public  class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Depart
     private  DepartmentMapper departmentMapper;
 
     @Override
-    public List<Department> getPageDapartmens() {
-        List<Department> list = departmentMapper.getDepartmentAll();
+    public List<Department> getPageDapartmens(Pagination page,Department departmentName) {
+        List<Department> list = departmentMapper.getDepartmentAll(page,departmentName);
         return list;
     }
 

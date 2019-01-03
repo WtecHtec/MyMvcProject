@@ -32,4 +32,11 @@ public class BaseController {
         return loginUser == null ? null : loginUser.getUserId();
     }
 
+    /**
+     *  获取当前登录的username
+     */
+    public String getLoginUserName() {
+        User loginUser = getLoginUser();
+        return loginUser == null ? null : loginUser.getUsername();
+    }
 }

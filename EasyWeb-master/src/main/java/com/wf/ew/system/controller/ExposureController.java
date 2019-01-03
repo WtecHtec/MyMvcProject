@@ -1,7 +1,11 @@
 package com.wf.ew.system.controller;
 
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.wf.ew.common.JsonResult;
+import com.wf.ew.common.PageResult;
+import com.wf.ew.meetingronm.service.EquipmentService;
 import com.wf.ew.system.model.Department;
+import com.wf.ew.system.model.Equipment;
 import com.wf.ew.system.model.User;
 import com.wf.ew.system.service.DepartmentService;
 import com.wf.ew.system.service.UserService;
@@ -23,6 +27,8 @@ public class ExposureController {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+	private EquipmentService equipmentService;
 
     @PostMapping(value = "/registerUser" )
     public JsonResult registerUser( User parm) {
@@ -40,16 +46,22 @@ public class ExposureController {
     @Autowired
     private DepartmentService departmentService;
 
-    // 选择框 显示
-//    @PostMapping("/departmentAll")
+    // 部门选择框 显示
     @RequestMapping(value = "/departmentAll",method = RequestMethod.POST)
     public JsonResult getDepartmentAll () {
         log.info("获取部门信息，用于下拉框");
-        List<Department> list = departmentService.getPageDapartmens();
+        List<Department> list = departmentService.getPageDapartmens(new Pagination(),new Department());
         if (list != null ) {
             return JsonResult.ok().put("department",list);
         } else {
             return JsonResult.error("获取部门信息失败");
         }
     }
+    
+    // 设备 选择框显示
+    @RequestMapping(value="/getEquipmentAll", method=RequestMethod.POST)
+	public PageResult<Equipment> getEquipmentAll() {
+		log.info("查询所有设备的信息");
+		return equipmentService.getEquipmentAll();
+	}
 }

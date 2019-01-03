@@ -11,6 +11,94 @@
     <link rel="stylesheet" href="../../assets/common.css" media="all">
 </head>
 <body>
+<div class="layui-container">
+    <div class="layui-form-item" style="margin-top: 10px">
 
+     <!--    <div class="layui-inline">
+            <label class="layui-form-label">设备名称</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <input type="text"  id="departmentName" required lay-verify="required" placeholder="请输入设备名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn  layui-btn-normal" id="searchDataBtn">
+                <i class="layui-icon layui-icon-search"></i> 搜索
+            </button>
+        </div> -->
+        <div class="layui-inline">
+            <button class="layui-btn" id="equipmentAddBtn">
+                <i class="layui-icon">&#xe608;</i> 添加
+            </button>
+        </div>
+
+	 <table class="layui-table" id="equipmentTable" lay-filter="equipmentTable"></table>
+	 
+    </div>
+</div>
+
+<!-- 添加对话框 -->
+<script type="text/html"  id="equipmentAddDialog">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+           <label class="layui-form-label">设备名称</label>
+            <div class="layui-input-block">
+              <input type="text" name="equipmentName" required  lay-verify="required" placeholder="请输入设备名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="equipmentFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+
+</script>
+
+<!-- js 部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/common.js"></script>
+<script type="text/javascript">
+    layui.use(['form','layer','admin','jquery', 'table'], function () {
+    	var $ = layui.jquery
+        var admin = layui.admin
+        var form = layui.form
+        var table = layui.table
+        
+        $('#equipmentAddBtn').click(function(){
+        	 layer.open({
+                 title: '添加设备',
+                 btn:[],
+                 content: $('#equipmentAddDialog').html()
+             })
+        })
+        //监听提交
+        form.on('submit(equipmentFormSubmit)', function(data){
+        	admin.req('equipment/insertEquipment', data.field, function(res){
+        		if (res.code === 200) {
+        			layer.msg(res.msg,{icon: 1})
+        			// 重载
+        			table.reload('equipmentTable')
+        		} else {
+        			layer.msg(res.msg,{icon: 2})
+        		}
+        	}, 'POST')
+          return false
+        })
+        
+        // 渲染表格
+        table.render({
+            elem: '#equipmentTable'
+            ,url: base_server + 'equipment/getEquipmentAll'
+            ,method: 'post'
+            ,where: {
+                access_token: admin.getToken().access_token
+            }
+            ,cols: [[ //表头
+                {type: 'numbers'},
+                {field: 'equipmentName', title: '设备名称'}
+            ]]
+          });
+  
+    })
+</script>
 </body>
 </html>
