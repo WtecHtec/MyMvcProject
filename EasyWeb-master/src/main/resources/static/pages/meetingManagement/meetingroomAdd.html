@@ -29,47 +29,45 @@
          <br />
          
          <form class="layui-form" action="" style="margin-top: 10px">
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">会议室名称</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="meetingRoomName" style= "width: 150px;" required  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">容纳人数</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="meetingRoomPeoples" style= "width: 150px;"  required  lay-verify="required|number"  placeholder="请输入人数"  autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  </form>
-         <div class="layui-form-item">
-		    <label class="layui-form-label">设备</label>
-		    <div class="layui-input-block">
-		    <table id="equimentsTable" lay-filter="equimentsTable"></table>
-		       
-		    </div>
-	 	 </div>
-        <div class="layui-inline" style="margin-top: 50px">
-        
-	        <div class="layui-container">  
-			  <div class="layui-row">
-			    <div class="layui-col-md9">
-			    &emsp;
-			    </div>
-			    <div class="layui-col-md3">
-		 			<button class="layui-btn  layui-btn-normal" id="meetingRoomBackBtn">
-		                <i class="layui-icon">&#x21b6;</i> 返回
-		            </button>
-		            <button class="layui-btn  layui-btn-normal" id="meetingRoomAddBtn" lay-filter="meetingRoomFormSubmit" lay-submit>
-		                <i class="layui-icon"></i> 保存
-		            </button>
-		   		</div>
-			 </div>
-           
-        </div>
+              <div class="layui-form-item">
+                    <label class="layui-form-label">会议室名称</label>
+                    <div class="layui-input-block">
+                         <input type="text" name="meetingRoomName" id="meetingRoomName" style= "width: 150px;" required  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                    </div>
+              </div>
+              <div class="layui-form-item">
+                    <label class="layui-form-label">容纳人数</label>
+                    <div class="layui-input-block">
+                         <input type="text" name="meetingRoomPeoples" id="meetingRoomPeoples" style= "width: 150px;"  required  lay-verify="required|number"  placeholder="请输入人数"  autocomplete="off" class="layui-input">
+                    </div>
+              </div>
+         </form>
 
+         <div class="layui-form-item">
+                <label class="layui-form-label">设备</label>
+                <div class="layui-input-block">
+                     <table id="equimentsTable" lay-filter="equimentsTable"></table>
+                </div>
+	 	 </div>
+
+        <div class="layui-inline" style="margin-top: 50px">
+                <div class="layui-container">
+                      <div class="layui-row">
+                                <div class="layui-col-md9">
+                                  &emsp;
+                                </div>
+                                <div class="layui-col-md3">
+                                        <button class="layui-btn  layui-btn-normal" id="meetingRoomBackBtn">
+                                             <i class="layui-icon">&#x21b6;</i> 返回
+                                        </button>
+                                        <button class="layui-btn  layui-btn-normal" id="meetingRoomAddBtn" lay-filter="meetingRoomFormSubmit" lay-submit>
+                                             <i class="layui-icon"></i> 保存
+                                        </button>
+                                </div>
+                      </div>
+                </div>
+        </div>
     </div>
-    
 </div>
 
 <!-- 设备选择器 -->
@@ -93,7 +91,7 @@
 <script type="text/html"  id="equipmentAddDialog">
 <form class="layui-form" action=""  lay-filter="equittmentEidt">
         <div class="layui-form-item">
-            <label class="layui-form-label">部门</label>
+            <label class="layui-form-label">设备</label>
             <div class="layui-input-block"  id="equimentSelId" lay-filter="equimentSelId" name="departmentId" > </div>
         </div>
 		<div class="layui-form-item">
@@ -170,30 +168,36 @@
           })
        
         // 保存操作
-         form.on('submit(meetingRoomFormSubmit)', function(data){
-        	
-        	console.log(equiments)
-        	var roomEquiments = []
-        	for (var i =0; i < equiments.length; i++){
-        		roomEquiments.push({
-        			equimentId: equiments[i].equimentId,
-                	equipmentName: equiments[i].equipmentName,
-                	counts: equiments[i].counts,
-        		})
-        	}
-        	var pram = {
-        		meetingRoomName: data.field.meetingRoomName,
-        		meetingRoomPeoples: data.field.meetingRoomPeoples,
-        		roomEquiments: roomEquiments
-        	}
+        form.on('submit(meetingRoomFormSubmit)', function(data){
+            var meetingRoomName = $('#meetingRoomName').val()
+            var meetingRoomPeoples = $('#meetingRoomPeoples').val()
+            if (meetingRoomName === undefined || meetingRoomName === '') {
+                layer.msg('会议室名称不能为空')
+                return false
+            }
+            if (meetingRoomPeoples === undefined || meetingRoomPeoples === '') {
+                layer.msg('容纳人数不能为空')
+                return false
+            }
+            console.log(meetingRoomPeoples)
+            if (!new RegExp('^[0-9]*$').test (meetingRoomPeoples)) {
+                layer.msg('容纳人数，请输入数字')
+                return false
+            }
+            var pram = {
+                meetingRoomName: meetingRoomName,
+                meetingRoomPeoples: meetingRoomPeoples,
+                roomEquiments: equiments
+            }
         	console.log(pram)
-        	admin.req('meetingroom/insertMeetingRoom', pram, function(res){
+        	admin.feacth('meetingroom/insertMeetingRoom', pram, 'application/json; charset=UTF-8', function(res){
         		if (res.code === 200 ) {
-        			
+        			layer.msg(res.msg, {icon: 1})
+                    location.replace('meetingroom.html')
         		} else {
-        			
+                    layer.msg(res.msg, {icon: 2})
         		}
-        		
+
         	}, 'POST')
         	return false;
         })
@@ -221,7 +225,7 @@
 	                     selectPlus.on('selectPlus(equimentSelId)', function(obj){  
 						// 单选时
 							equipmentName = obj.value
-							equimentId = obj.checkedData.id
+							id = obj.checkedData.id
 						});
 	                    //监听提交
 		              	  form.on('submit(equipmentFormSubmit)', function(data){

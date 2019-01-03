@@ -39,6 +39,24 @@ layui.define(['layer'], function (exports) {
                 success: success
             });
         },
+        // 封装 ajax 请求 ,可设置 contentType 返回数据类型为json
+        feacth: function (url, data,contenttype, success, method) {
+            if ('put' == method.toLowerCase()) {
+                method = 'POST';
+                data._method = 'PUT';
+            } else if ('delete' == method.toLowerCase()) {
+                method = 'POST';
+                data._method = 'DELETE';
+            }
+            admin.ajax({
+                url: (base_server ? base_server : '') + url,
+                data: JSON.stringify(data),
+                contentType: contenttype,
+                type: method,
+                dataType: 'json',
+                success: success
+            });
+        },
         // 封装ajax请求
         ajax: function (param) {
             var successCallback = param.success;

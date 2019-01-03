@@ -6,6 +6,8 @@ import com.wf.ew.system.model.RoomEquiment;
 
 public class MeetingRoomRequest {
 
+	private  String  userName;
+
     private String  meetingRoomName;
 	
 	private Integer meetingRoomPeoples;
@@ -35,6 +37,12 @@ public class MeetingRoomRequest {
 	public void setRoomEquiments(List<RoomEquiment> roomEquiments) {
 		this.roomEquiments = roomEquiments;
 	}
-	
-	
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }

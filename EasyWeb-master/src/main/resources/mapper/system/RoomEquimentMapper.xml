@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wf.ew.system.dao.RoomEquimentMapper">
+
+<insert id="insertRoomEquimentList" parameterType="java.util.List">
+    INSERT INTO room_equiment(id,equiment_id,meetroom_id,counts,create_id,create_time) VALUES
+
+    <foreach collection="list" item="userinfo" separator=",">
+        (#{userinfo.id}, #{userinfo.equimentId}, #{userinfo.meetroomId}, #{userinfo.counts},  #{userinfo.createId}, #{userinfo.createTime})
+    </foreach>
+</insert>
+
+
+</mapper>
