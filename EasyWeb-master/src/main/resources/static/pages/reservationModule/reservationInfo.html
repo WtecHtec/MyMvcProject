@@ -39,20 +39,112 @@
 		 </div>
 		 <div class="layui-col-md6">
 			   你的内容 3/12
+
 		 </div>
 	</div>
 	
 </div>
-        
+
+<!-- 预约对话框 -->      
+<script type="text/html" id="reservationCreateDialog">
+<div class="layui-carousel" id="meetingRoomId" lay-filter="meetingRoomId">
+  <div carousel-item>
+    <div>
+      <div class="layui-card">
+        <div class="layui-card-header">卡片面板</div>
+        <div class="layui-card-body">
+                              卡片式面板面板通常用于非白色背景色的主体内<br>
+                             从而映衬出边框投影
+        </div>
+       </div>
+    </div>
+    <div>1</div>
+  </div>
+</div>
+<br />
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+  <div class="layui-form-item">
+    <label class="layui-form-label">人数</label>
+    <div class="layui-input-block">
+      <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+ <div class="layui-form-item">
+    <label class="layui-form-label">日期</label>
+    <div class="layui-input-block">
+     <input type="text" id="reservationdate">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">选择框</label>
+    <div class="layui-input-block">
+     <select name="city" lay-verify="">
+  		  <option value="0">上午</option>
+ 		  <option value="1">下午</option>
+		  <option value="2">晚上</option>
+	 </select>  
+    </div>
+  </div>
+
+
+<div class="layui-form-item text-right">
+     <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+     <button class="layui-btn" lay-filter="departmentEditFormSubmit" lay-submit>预约</button>
+ </div>
+
+</form>
+
+</script>
  
 <!-- js 部分-->
 <script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
 <script type="text/javascript" src="../../assets/common.js"></script>
 <script type="text/javascript" src="../../assets/module/laydate.js"></script>
 <script type="text/javascript">
-layui.use(['element', 'laydate'], function(){
-	 var element = layui.element;
+layui.use(['element', 'laydate', 'admin', 'carousel', 'layer', 'jquery', 'form'], function(){
+	 var element = layui.element
 	 var laydate = layui.laydate
+	 var carousel = layui.carousel
+	 var layer = layui.layer
+	 var $ = layui.jquery
+	 var form = layui.form
+	 // 预约按钮事件
+	 $("#departmentAddBtn").click( function () { 
+		 layer.open({
+             title: '添加预约',
+             btn:[],
+             offset: ['100px', '10%'],
+             content: $('#reservationCreateDialog').html(),
+             success: function(layero, index){ // 对话框成功回调
+            	 form.render()
+            	//建造实例 轮播
+           		carousel.render({
+	           	    elem: '#meetingRoomId'
+	           	    ,width: '800px'
+	           	    ,height: '250px' //设置容器宽度
+	           	    ,arrow: 'always' //始终显示箭头
+	           	    ,autoplay: false
+	           	    //,anim: 'updown' //切换动画方式
+           	  })
+           	//前后若干天可选，这里以7天为例
+	           	laydate.render({
+	           	  elem: '#reservationdate'
+	           	  ,min:0
+	           	  ,max: 15
+	           	})
+             
+            }
+         })
+	
+	 })
+	  //监听轮播切换事件
+   	carousel.on('change(meetingRoomId)', function(obj){ //test1来源于对应HTML容器的 lay-filter="test1" 属性值
+   	  console.log(obj.index); //当前条目的索引
+   	  console.log(obj.prevIndex); //上一个条目的索引
+   	  console.log(obj.item); //当前条目的元素对象
+   	})
 	 //直接嵌套显示
 	 laydate.render({
 	   elem: '#test1',
@@ -73,5 +165,13 @@ layui.use(['element', 'laydate'], function(){
 	  
 })
 </script>
+<!-- css -->
+
+<style>
+.layui-card .layui-card-body {
+    height: 180px;
+}
+
+</style>
 </body>
 </html>

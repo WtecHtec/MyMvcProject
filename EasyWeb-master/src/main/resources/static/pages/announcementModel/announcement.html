@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>公告首页</title>
+    <link rel="icon" href="../../assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../assets/common.css" media="all">
+</head>
+<body>
+
+<div class="layui-carousel" id="meetingRoomId" lay-filter="meetingRoomId">
+  <div carousel-item>
+    <div>
+      <div class="layui-card">
+        <div class="layui-card-header">卡片面板</div>
+        <div class="layui-card-body">
+                              卡片式面板面板通常用于非白色背景色的主体内<br>
+                             从而映衬出边框投影
+        </div>
+       </div>
+    </div>
+    <div>1</div>
+  </div>
+</div>
+<br />
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+  <div class="layui-form-item">
+    <label class="layui-form-label">人数</label>
+    <div class="layui-input-block">
+      <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+ <div class="layui-form-item">
+    <label class="layui-form-label">日期</label>
+    <div class="layui-input-block">
+     <input type="text" id="reservationdate">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">选择框</label>
+    <div class="layui-input-block">
+     <select name="city" lay-verify="">
+  		<option value="0">上午</option>
+ 		  <option value="1">下午</option>
+		  <option value="2">晚上</option>
+	 </select>  
+    </div>
+  </div>
+
+
+<div class="layui-form-item text-right">
+     <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+     <button class="layui-btn" lay-filter="departmentEditFormSubmit" lay-submit>预约</button>
+ </div>
+
+</form>
+
+会议室公告
+
+</body>
+</html>
