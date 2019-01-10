@@ -48,7 +48,7 @@
 <!-- 预约对话框 -->      
 <script type="text/html" id="reservationCreateDialog">
 <div class="layui-carousel" id="meetingRoomId" lay-filter="meetingRoomId">
-  <div carousel-item>
+  <div carousel-item id="carousel-item">
     <div>
       <div class="layui-card">
         <div class="layui-card-header">卡片面板</div>
@@ -78,7 +78,7 @@
   </div>
 
   <div class="layui-form-item">
-    <label class="layui-form-label">选择框</label>
+    <label class="layui-form-label">时间段</label>
     <div class="layui-input-block">
      <select name="city" lay-verify="">
   		  <option value="0">上午</option>
@@ -110,6 +110,7 @@ layui.use(['element', 'laydate', 'admin', 'carousel', 'layer', 'jquery', 'form']
 	 var layer = layui.layer
 	 var $ = layui.jquery
 	 var form = layui.form
+    var admin =  layui.admin
 	 // 预约按钮事件
 	 $("#departmentAddBtn").click( function () { 
 		 layer.open({
@@ -119,6 +120,7 @@ layui.use(['element', 'laydate', 'admin', 'carousel', 'layer', 'jquery', 'form']
              content: $('#reservationCreateDialog').html(),
              success: function(layero, index){ // 对话框成功回调
             	 form.render()
+                 console.log($('#carousel-item'))
             	//建造实例 轮播
            		carousel.render({
 	           	    elem: '#meetingRoomId'
@@ -139,6 +141,11 @@ layui.use(['element', 'laydate', 'admin', 'carousel', 'layer', 'jquery', 'form']
          })
 	
 	 })
+    // 获取会议室信息
+    admin.req('meetingroom/selectRoomEquimentAll',{},function (res) {
+        console.log(res)
+        console.log($('#carousel-item'))
+    }, 'POST')
 	  //监听轮播切换事件
    	carousel.on('change(meetingRoomId)', function(obj){ //test1来源于对应HTML容器的 lay-filter="test1" 属性值
    	  console.log(obj.index); //当前条目的索引

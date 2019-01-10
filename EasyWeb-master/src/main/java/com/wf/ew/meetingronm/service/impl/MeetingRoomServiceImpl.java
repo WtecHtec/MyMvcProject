@@ -6,6 +6,7 @@ import com.wf.ew.common.PageResult;
 import com.wf.ew.system.model.Department;
 import com.wf.ew.system.model.RoomEquiment;
 import com.wf.ew.system.model.ex.MeetingRoomEx;
+import com.wf.ew.system.model.ex.RoomEquimentEx;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import com.wf.ew.system.model.Equipment;
 import com.wf.ew.system.model.MeetingRoom;
 import com.wf.ew.system.request.MeetingRoomRequest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -82,6 +84,18 @@ public class MeetingRoomServiceImpl  extends ServiceImpl<MeetingRoomMapper, Meet
 		List<MeetingRoomEx> result = meetingRoomExPage.getRecords();
 
 		return new PageResult<>(result, meetingRoomExPage.getTotal());
+	}
+
+	@Override
+	public JsonResult selectRoomEquimentAll() {
+		log.info("获取预约会议室页面中会议室信息开始");
+		List<RoomEquimentEx> data =  new ArrayList<>();
+		data = roomEquimentMapper.selectRoomEquimentAll();
+		log.info("获取预约会议室页面中会议室信息结束");
+		if (data != null  && data.size() > 0) {
+			return JsonResult.ok("获取会议室信息成功").put("data", data);
+		}
+		return JsonResult.error("获取会议室信息失败");
 	}
 
 }

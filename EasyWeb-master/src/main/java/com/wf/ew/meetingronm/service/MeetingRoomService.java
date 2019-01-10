@@ -7,11 +7,16 @@ import com.wf.ew.common.PageResult;
 import com.wf.ew.system.model.Equipment;
 import com.wf.ew.system.model.MeetingRoom;
 import com.wf.ew.system.model.ex.MeetingRoomEx;
+import com.wf.ew.system.model.ex.RoomEquimentEx;
 import com.wf.ew.system.request.MeetingRoomRequest;
+
+import java.util.List;
 
 public interface MeetingRoomService  extends IService<MeetingRoom> {
 	
 	JsonResult insertMeetRoom(MeetingRoomRequest pram);
 
 	PageResult<MeetingRoomEx> getPageMeetingRoom(Pagination page, String meetRoomName);
+
+	JsonResult selectRoomEquimentAll();
 }

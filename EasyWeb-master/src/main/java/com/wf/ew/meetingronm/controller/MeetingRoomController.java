@@ -38,4 +38,9 @@ public class MeetingRoomController extends BaseController  {
 		return  meetingRoomService.getPageMeetingRoom(pagination, meetingRoomName);
 	}
 
+
+	@RequestMapping(value = "/selectRoomEquimentAll", method = RequestMethod.POST)
+	public JsonResult selectRoomEquimentAll() {
+		return  meetingRoomService.selectRoomEquimentAll();
+	}
 }
