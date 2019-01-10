@@ -1,6 +1,10 @@
 package com.wf.ew.meetingronm.controller;
 
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.wf.ew.common.BaseController;
+import com.wf.ew.common.PageResult;
+import com.wf.ew.system.model.User;
+import com.wf.ew.system.model.ex.MeetingRoomEx;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +18,7 @@ import com.wf.ew.system.request.MeetingRoomRequest;
 
 @RestController
 @RequestMapping("${api.version}/meetingroom")
-public class MeetingRoomController  extends BaseController {
+public class MeetingRoomController extends BaseController  {
 	private static final org.slf4j.Logger log = LoggerFactory.getLogger(EquipmentController.class);
 	
 	@Autowired
@@ -26,4 +30,12 @@ public class MeetingRoomController  extends BaseController {
 		pram.setUserName(getLoginUserName());
 		return  meetingRoomService.insertMeetRoom(pram);
 	}
+
+	@RequestMapping(value = "/getPageMeetingRoom", method = RequestMethod.POST)
+	public PageResult<MeetingRoomEx> getPageMeetingRoom(Integer page, Integer limit, String meetingRoomName) {
+		 User user = getLoginUser();
+		Pagination pagination = new Pagination(page, limit);
+		return  meetingRoomService.getPageMeetingRoom(pagination, meetingRoomName);
+	}
+
 }

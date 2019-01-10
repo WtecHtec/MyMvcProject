@@ -11,7 +11,27 @@
         <if test="createId != null  and createId !=''">
             AND create_id = #{createId}
         </if>
+    </select>
 
+    <select id="getPageMeetingRoom"  parameterType="java.lang.String" resultType="com.wf.ew.system.model.ex.MeetingRoomEx">
+
+        SELECT
+              GROUP_CONCAT(re.equiment_id) as equimentIds,
+              re.meetroom_id as meetRoomId ,
+              GROUP_CONCAT(re.counts) as counts,
+              GROUP_CONCAT(e.equipment_name) as equipmentNames ,
+              r.meeting_room_name as meetingRoomName,
+              r.meeting_room_peoples as meetingRoomPeoples
+            FROM
+              room_equiment re
+            LEFT JOIN equipment e ON e.id = re.equiment_id
+            LEFT JOIN meeting_room r ON r.id = re.meetroom_id
+            WHERE 1 = 1
+            <if test="meetingRoomName != null and  meetingRoomName !=''">
+                and meeting_room_name = #{meetingRoomName}
+            </if>
+            GROUP BY r.meeting_room_name
 
     </select>
+
 </mapper>

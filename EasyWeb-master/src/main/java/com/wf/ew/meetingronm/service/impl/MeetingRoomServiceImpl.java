@@ -1,6 +1,11 @@
 package com.wf.ew.meetingronm.service.impl;
 
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.wf.ew.common.PageResult;
+import com.wf.ew.system.model.Department;
 import com.wf.ew.system.model.RoomEquiment;
+import com.wf.ew.system.model.ex.MeetingRoomEx;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,7 @@ import com.wf.ew.system.model.MeetingRoom;
 import com.wf.ew.system.request.MeetingRoomRequest;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MeetingRoomServiceImpl  extends ServiceImpl<MeetingRoomMapper, MeetingRoom> implements MeetingRoomService {
@@ -66,6 +72,16 @@ public class MeetingRoomServiceImpl  extends ServiceImpl<MeetingRoomMapper, Meet
 		}else {
 			return JsonResult.error("会议室信息添加失败,已存在该名称的会议室");
 		}
+	}
+
+	@Override
+	public PageResult<MeetingRoomEx> getPageMeetingRoom(Pagination page, String meetRoomName) {
+	   Page<MeetingRoomEx> meetingRoomExPage = new Page<>( (int)page.getPages(),page.getLimit());
+
+	   meetingRoomExPage.setRecords( meetingRoomMapper.getPageMeetingRoom(meetingRoomExPage,meetRoomName) );
+		List<MeetingRoomEx> result = meetingRoomExPage.getRecords();
+
+		return new PageResult<>(result, meetingRoomExPage.getTotal());
 	}
 
 }

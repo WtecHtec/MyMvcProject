@@ -36,6 +36,13 @@
     </div>
 </div>
 
+<!-- 设备显示-->
+<script type="text/html" id="equitmentTpl">
+
+{{# for( var i = 0; i < d.equipmentNames.split(',').length; i++) { }}
+  <span>{{ d.equipmentNames.split(',')[i] }} ---  {{ d.counts.split(',')[i] }} </span> <br/>
+{{# } }}
+</script>
 <!-- js 部分 -->
 <script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
 <script type="text/javascript" src="../../assets/common.js"></script>
@@ -50,8 +57,30 @@
         $('#meetingRoomAddBtn').click(function(){
         	location.replace('meetingroomAdd.html');
         })
+
+        // 渲染表格
+        table.render({
+            elem: '#meetingRoomTable'
+            ,url: base_server + 'meetingroom/getPageMeetingRoom'
+            ,method: 'post'
+            ,where: {
+                access_token: admin.getToken().access_token
+            }
+            , page: true,
+            cellMinWidth: 100
+            ,cols: [[ //表头
+                 {field: 'meetingRoomName', title: '会议室名称'}
+                ,{field: 'meetingRoomPeoples', title: '容纳人数'}
+                ,{title: '设备', templet: '#equitmentTpl', style:'height: 100px;'}
+                ,{ title: '操作'}
+            ]]
+        });
     })
 </script>
-
+<style>
+   .layui-table-main .laytable-cell-1-0-2 {
+        height: auto;
+    }
+</style>
 </body>
 </html>

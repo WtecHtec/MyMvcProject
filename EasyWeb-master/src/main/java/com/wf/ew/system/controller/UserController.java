@@ -7,6 +7,9 @@ import com.wf.ew.common.BaseController;
 import com.wf.ew.common.JsonResult;
 import com.wf.ew.common.PageResult;
 import com.wf.ew.common.exception.BusinessException;
+import com.wf.ew.system.dao.RoleAuthoritiesMapper;
+import com.wf.ew.system.dao.UserMapper;
+import com.wf.ew.system.dao.UserRoleMapper;
 import com.wf.ew.system.model.Role;
 import com.wf.ew.system.model.User;
 import com.wf.ew.system.model.UserRole;
@@ -44,6 +47,12 @@ public class UserController extends BaseController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private  UserRoleMapper userRoleMapper;
     /**
      * 这里参数过多，并且参数含有中文，建议用post请求，用restful风格解决不了需求时，建议不要强行使用restful
      * 加了一个/query是避免跟添加用户接口冲突
@@ -138,16 +147,26 @@ public class UserController extends BaseController {
         if (userService.updateById(user)) {
             List<UserRole> userRoles = new ArrayList<>();
             List<String> ids = new ArrayList<>();
-            for (String roleId : split) {
-                UserRole userRole = new UserRole();
-                userRole.setRoleId(Integer.parseInt(roleId));
-                userRole.setUserId(user.getUserId());
-                userRoles.add(userRole);
-                ids.add(roleId);
+            List<UserRole> userRoleList = new ArrayList<>();
+            // 获取角色
+            userRoleList = userMapper.getRolesByUserId(user.getUserId());
+            int i = 0;
+            if (userRoleList.size() > 0 ) {
+                i = userRoleMapper.delUserRoleByRoleIds(userRoleList);
+            }  else {
+                i = 1;
             }
-            userRoleService.deleteBatchIds(ids);
-            if (!userRoleService.insertBatch(userRoles)) {
-                throw new BusinessException("修改失败");
+            if (i > 0) {
+                for (String roleId : split) {
+                    UserRole userRole = new UserRole();
+                    userRole.setRoleId(Integer.parseInt(roleId));
+                    userRole.setUserId(user.getUserId());
+                    userRoles.add(userRole);
+                    ids.add(roleId);
+                }
+                if (!userRoleService.insertBatch(userRoles)) {
+                    throw new BusinessException("修改失败");
+                }
             }
             return JsonResult.ok("修改成功");
         }

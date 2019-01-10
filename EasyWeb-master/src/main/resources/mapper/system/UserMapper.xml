@@ -17,4 +17,7 @@
         where  username=#{username}
 
     </update>
+    <select id="getRolesByUserId" parameterType="java.lang.Integer" resultType="com.wf.ew.system.model.UserRole" >
+        SELECT role_id as roleId, user_id as userId FROM sys_user_role WHERE user_id = #{userId}
+    </select>
 </mapper>

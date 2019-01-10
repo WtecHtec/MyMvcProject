@@ -5,4 +5,12 @@
     <delete id="deleteTrash">
         DELETE FROM sys_role_authorities WHERE authority NOT IN (SELECT authority FROM sys_authorities)
     </delete>
+
+    <select id="getUserAuthorities" resultType="com.wf.ew.system.model.Authorities" parameterType="java.lang.Integer" >
+        SELECT authorities.authority as authority
+        FROM sys_role_authorities authorities
+        LEFT JOIN sys_user_role userrole ON userrole.role_id = authorities.role_id
+        LEFT JOIN sys_user sysuser ON sysuser.user_id = userrole.user_id
+        WHERE userrole.user_id = #{userId}
+    </select>
 </mapper>

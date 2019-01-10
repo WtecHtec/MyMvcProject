@@ -65,8 +65,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-block">
-                <input name="nickName" placeholder="请输入用户名" type="text" class="layui-input"
-                       maxlength="20" lay-verify="required" required/>
+                <input name="nickName" placeholder="请输入用户名" type="text" class="layui-input " maxlength="20" lay-verify="required" required/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -224,6 +223,9 @@
                 title: data ? '修改用户' : '添加用户',
                 content: $('#userForm').html(),
                 success: function (layero, index) {
+                    if (data) {
+                        $("input[name='username']").addClass('layui-disabled').attr({disabled: true})
+                    }
                     $(layero).children('.layui-layer-content').css('overflow', 'visible');
                     form.render('radio');
                     // 渲染角色下拉框
