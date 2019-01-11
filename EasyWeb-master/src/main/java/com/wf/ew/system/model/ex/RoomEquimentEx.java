@@ -7,8 +7,20 @@ public class RoomEquimentEx {
     private  String roomPeoples;
 
     private String equimentInfo;
+    
+    private Integer meetId;
+    
+    
 
-    public String getRoomName() {
+    public Integer getMeetId() {
+		return meetId;
+	}
+
+	public void setMeetId(Integer meetId) {
+		this.meetId = meetId;
+	}
+
+	public String getRoomName() {
         return roomName;
     }
 

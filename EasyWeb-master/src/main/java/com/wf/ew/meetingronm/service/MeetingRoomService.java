@@ -19,4 +19,6 @@ public interface MeetingRoomService  extends IService<MeetingRoom> {
 	PageResult<MeetingRoomEx> getPageMeetingRoom(Pagination page, String meetRoomName);
 
 	JsonResult selectRoomEquimentAll();
+	
+	JsonResult delMeetRoomById(Integer meetId);
 }

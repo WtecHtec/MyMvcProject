@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/user")
 public class ExposureController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(ExposureController.class);
     @Autowired
     private UserService userService;
     @Autowired

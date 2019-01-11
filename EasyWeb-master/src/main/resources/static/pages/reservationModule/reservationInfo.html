@@ -35,10 +35,9 @@
 	<div class="layui-tab-item layui-show">
 		<div class="layui-row">
 		 <div class="layui-col-md4">
-	 		<div  id="test1"> </div>
+	 		<div  id="reservationMapDate"> </div>
 		 </div>
-		 <div class="layui-col-md6">
-			   你的内容 3/12
+		 <div class="layui-col-md6" id="meetContent">
 
 		 </div>
 	</div>
@@ -49,16 +48,6 @@
 <script type="text/html" id="reservationCreateDialog">
 <div class="layui-carousel" id="meetingRoomId" lay-filter="meetingRoomId">
   <div carousel-item id="carousel-item">
-    <div>
-      <div class="layui-card">
-        <div class="layui-card-header">卡片面板</div>
-        <div class="layui-card-body">
-                              卡片式面板面板通常用于非白色背景色的主体内<br>
-                             从而映衬出边框投影
-        </div>
-       </div>
-    </div>
-    <div>1</div>
   </div>
 </div>
 <br />
@@ -66,21 +55,21 @@
   <div class="layui-form-item">
     <label class="layui-form-label">人数</label>
     <div class="layui-input-block">
-      <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input">
+      <input type="text" name="reservationPeople" placeholder="请输入"   autocomplete="off" class="layui-input" lay-verify="required|number">
     </div>
   </div>
 
  <div class="layui-form-item">
     <label class="layui-form-label">日期</label>
     <div class="layui-input-block">
-     <input type="text" id="reservationdate">
+     <input type="text" name='reservationDateStr' id="reservationDate" lay-verify="required|date" >
     </div>
   </div>
 
   <div class="layui-form-item">
     <label class="layui-form-label">时间段</label>
     <div class="layui-input-block">
-     <select name="city" lay-verify="">
+     <select name="reservationPeriod" lay-verify="required">
   		  <option value="0">上午</option>
  		  <option value="1">下午</option>
 		  <option value="2">晚上</option>
@@ -88,10 +77,16 @@
     </div>
   </div>
 
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">会议内容</label>
+    <div class="layui-input-block">
+      <textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+    </div>
+  </div>
 
 <div class="layui-form-item text-right">
      <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
-     <button class="layui-btn" lay-filter="departmentEditFormSubmit" lay-submit>预约</button>
+     <button class="layui-btn" lay-filter="reservationCreateFormSubmit" lay-submit>预约</button>
  </div>
 
 </form>
@@ -110,7 +105,12 @@ layui.use(['element', 'laydate', 'admin', 'carousel', 'layer', 'jquery', 'form']
 	 var layer = layui.layer
 	 var $ = layui.jquery
 	 var form = layui.form
-    var admin =  layui.admin
+     var admin =  layui.admin
+     var meetDatas = []
+	 var meetIndex = 0
+	 
+	 getSreach({'reservationDateStr': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()})
+	 
 	 // 预约按钮事件
 	 $("#departmentAddBtn").click( function () { 
 		 layer.open({
@@ -121,54 +121,130 @@ layui.use(['element', 'laydate', 'admin', 'carousel', 'layer', 'jquery', 'form']
              success: function(layero, index){ // 对话框成功回调
             	 form.render()
                  console.log($('#carousel-item'))
-            	//建造实例 轮播
-           		carousel.render({
-	           	    elem: '#meetingRoomId'
-	           	    ,width: '800px'
-	           	    ,height: '250px' //设置容器宽度
-	           	    ,arrow: 'always' //始终显示箭头
-	           	    ,autoplay: false
-	           	    //,anim: 'updown' //切换动画方式
-           	  })
-           	//前后若干天可选，这里以7天为例
-	           	laydate.render({
-	           	  elem: '#reservationdate'
+                 var meetDiv = $('#carousel-item')
+                 // 获取会议室信息
+			    admin.req('meetingroom/selectRoomEquimentAll',{},function (res) {
+			    	var meetHtml = ''
+			        if (res.code == 200) {
+			        	meetDatas = res.data
+			        	for (var i = 0; i < res.data.length; i++) {
+			        		meetHtml +=  '<div>'+
+			        	     ' <div class="layui-card">'+
+			        	      '  <div class="layui-card-header">'+ res.data[i].roomName +'</div>'+
+			        	      '  <div class="layui-card-body">'+
+			        	        '容纳人数:' + res.data[i].roomPeoples + '<br /> 设备：' +
+			        	         res.data[i].equimentInfo +
+			        	     '   </div>'+
+			        	     '  </div>'+
+			        	   ' </div>'
+			        	}
+			        	meetDiv.html(meetHtml)
+			        	//建造实例 轮播
+		           		carousel.render({
+			           	    elem: '#meetingRoomId'
+			           	    ,width: '800px'
+			           	    ,height: '250px' //设置容器宽度
+			           	    ,arrow: 'always' //始终显示箭头
+			           	    ,autoplay: false
+			           	    //,anim: 'updown' //切换动画方式
+		           		  })
+		           		  
+			        } else {
+			        	layer.msg(res.msg, {icon: 1})
+			        }
+			       
+			    }, 'POST')
+			    
+           		//前后若干天可选，这里以7天为例
+    	       	laydate.render({
+	           	  elem: '#reservationDate'
 	           	  ,min:0
-	           	  ,max: 15
+	           	  ,max: 30
 	           	})
              
             }
          })
 	
 	 })
-    // 获取会议室信息
-    admin.req('meetingroom/selectRoomEquimentAll',{},function (res) {
-        console.log(res)
-        console.log($('#carousel-item'))
-    }, 'POST')
 	  //监听轮播切换事件
    	carousel.on('change(meetingRoomId)', function(obj){ //test1来源于对应HTML容器的 lay-filter="test1" 属性值
-   	  console.log(obj.index); //当前条目的索引
-   	  console.log(obj.prevIndex); //上一个条目的索引
-   	  console.log(obj.item); //当前条目的元素对象
+   		meetIndex = obj.index
+   /* 	    console.log(obj.index); //当前条目的索引
+   	    console.log(obj.prevIndex); //上一个条目的索引
+   	    console.log(obj.item); //当前条目的元素对象 */
    	})
-	 //直接嵌套显示
-	 laydate.render({
-	   elem: '#test1',
-	   theme: '#7AC5CD',
-	   position: 'static',
-	   showBottom: false,
-	   mark: {
-		    '2018-12-31': '' //每年的日期
-		    ,'0-0-10': '工资' //每月某天
-		    ,'0-0-15': '月中'
-		    ,'2017-8-15': '' //如果为空字符，则默认显示数字+徽章
-		    ,'2099-10-14': '呵呵'
-		 },
-	  change: function(value, date){
-		alert('你选择的日期是：' + value + '\n\n获得的对象是' + JSON.stringify(date));
-	  }
-	 });
+   	
+  	 	//监听提交
+	  form.on('submit(reservationCreateFormSubmit)', function(data){
+	    if (data.field.reservationPeople > meetDatas[meetIndex].roomPeoples ) {
+	    	  layer.msg('人数不能大于会议室容纳人数', {icon: 2})
+	    } else {
+	    	data.field['meetId'] =  meetDatas[meetIndex].meetId
+	    	admin.req('meetreservation/insertMeetReservation', data.field,  function(res){
+	    		if (res.code == 200) {
+	    			layer.msg(res.msg, {icon: 1})
+	    		} else {
+	    			layer.msg(res.msg, {icon: 2})
+	    		}
+	    	}, 'POST')
+	    }
+	    return false
+	  })
+	  
+	  // 获取预约信息
+	  function getSreach(pram) {
+		 admin.req('meetreservation/selectMeetReservations', pram,  function(res){
+			  console.log(res)
+			  if (res.code == 200) {
+				  var marks = res.datamap
+				  setContent(res.data)
+				 //直接嵌套显示
+				 laydate.render({
+				   elem: '#reservationMapDate',
+				   theme: '#7AC5CD',
+				   position: 'static',
+				   showBottom: false,
+				   min:0,
+		           max: 30,
+				   mark: marks,
+				   change: function(value, date){
+					setContentByDate({'reservationDateStr': value})
+				   }
+				 });
+	 		 } else {
+	 			 layer.msg(res.msg, {icon: 2})
+	 		 }
+		  }, 'POST')
+	 }
+	 
+	 // 根据日期查询
+	 function setContentByDate(pram) {
+		 admin.req('meetreservation/selectMeetReservations', pram,  function(res){
+			  if (res.code == 200) {
+				  setContent(res.data)
+	 		 } else {
+	 			 layer.msg(res.msg, {icon: 2})
+	 		 }
+		  }, 'POST')
+	 }
+	 
+	 // 设置内容
+	 function setContent(data) {
+		var meetContentDiv =  $('#meetContent')
+		var meetContentHtml = ''
+		meetContentDiv.html('')
+		for(var i = 0; i < data.length; i++) {
+			meetContentHtml +=  '<div class="layui-card"> '+
+			 ' <div class="layui-card-header">'+ data[i].reservationPeriodStr +' </div> '+
+			'  <div class="layui-card-body"> '+
+			 '    会议室 ：' +   data[i].meetingRoomName +' <br> '+
+			 '    会议人数 ：' +   data[i].reservationPeople +' <br> '+
+			 '    会议内容 ：' +   data[i].content +' <br> '+
+			'  </div> '+
+			'</div> '
+		}
+		meetContentDiv.html(meetContentHtml)
+	 }
 	  
 })
 </script>

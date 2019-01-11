@@ -12,7 +12,7 @@
 
     <select id="selectRoomEquimentAll" resultType="com.wf.ew.system.model.ex.RoomEquimentEx">
         SELECT
-        room.meeting_room_name as roomName , room.meeting_room_peoples as roomPeoples, GROUP_CONCAT(CONCAT(e.equipment_name,'--', re.counts) )  as equimentInfo
+        room.id as meetId, room.meeting_room_name as roomName , room.meeting_room_peoples as roomPeoples, GROUP_CONCAT(CONCAT(e.equipment_name,'--', re.counts) )  as equimentInfo
         FROM room_equiment re
         LEFT JOIN meeting_room room on room.id = re.meetroom_id
         LEFT JOIN equipment e on e.id = re.equiment_id

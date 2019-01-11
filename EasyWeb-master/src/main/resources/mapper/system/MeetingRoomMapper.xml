@@ -26,7 +26,7 @@
               room_equiment re
             LEFT JOIN equipment e ON e.id = re.equiment_id
             LEFT JOIN meeting_room r ON r.id = re.meetroom_id
-            WHERE 1 = 1
+            WHERE 1 = 1   and   r.id IS not null 
             <if test="meetingRoomName != null and  meetingRoomName !=''">
                 and meeting_room_name = #{meetingRoomName}
             </if>

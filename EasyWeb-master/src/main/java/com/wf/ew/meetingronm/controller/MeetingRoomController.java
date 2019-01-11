@@ -7,6 +7,7 @@ import com.wf.ew.system.model.User;
 import com.wf.ew.system.model.ex.MeetingRoomEx;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +20,7 @@ import com.wf.ew.system.request.MeetingRoomRequest;
 @RestController
 @RequestMapping("${api.version}/meetingroom")
 public class MeetingRoomController extends BaseController  {
-	private static final org.slf4j.Logger log = LoggerFactory.getLogger(EquipmentController.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(MeetingRoomController.class);
 	
 	@Autowired
 	private MeetingRoomService meetingRoomService;
@@ -42,5 +43,11 @@ public class MeetingRoomController extends BaseController  {
 	@RequestMapping(value = "/selectRoomEquimentAll", method = RequestMethod.POST)
 	public JsonResult selectRoomEquimentAll() {
 		return  meetingRoomService.selectRoomEquimentAll();
+	} 
+	
+	@RequestMapping(value = "/delMeetRoomById/{meetId}", method = RequestMethod.POST)
+	public JsonResult delMeetRoomById(@PathVariable("meetId")String meetId) {
+		
+		return  meetingRoomService.delMeetRoomById(Integer.parseInt(meetId));
 	}
 }

@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("${api.version}/department")
 public class DepartmentController  extends BaseController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(DepartmentController.class);
 
     @Autowired
     private DepartmentService departmentService;

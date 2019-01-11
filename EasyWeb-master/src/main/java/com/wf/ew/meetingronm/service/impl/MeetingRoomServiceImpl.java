@@ -1,5 +1,7 @@
 package com.wf.ew.meetingronm.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.wf.ew.common.PageResult;
@@ -29,7 +31,7 @@ import java.util.List;
 
 @Service
 public class MeetingRoomServiceImpl  extends ServiceImpl<MeetingRoomMapper, MeetingRoom> implements MeetingRoomService {
-	private static final org.slf4j.Logger log = LoggerFactory.getLogger(EquipmentController.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(MeetingRoomServiceImpl.class);
 
 	@Autowired
     private MeetingRoomMapper meetingRoomMapper;
@@ -96,6 +98,19 @@ public class MeetingRoomServiceImpl  extends ServiceImpl<MeetingRoomMapper, Meet
 			return JsonResult.ok("获取会议室信息成功").put("data", data);
 		}
 		return JsonResult.error("获取会议室信息失败");
+	}
+
+	@Override
+	public JsonResult delMeetRoomById(Integer meetId) {
+		log.info("删除会议室信息开始" + meetId);
+		int result = meetingRoomMapper.deleteById(meetId);
+		if (result > 0) {
+			EntityWrapper<RoomEquiment> wrapper = new EntityWrapper<>();
+			wrapper.eq("meetroom_id", meetId);
+			roomEquimentMapper.delete(wrapper);
+			return JsonResult.ok("删除成功");
+		}
+		return JsonResult.error("删除失败");
 	}
 
 }

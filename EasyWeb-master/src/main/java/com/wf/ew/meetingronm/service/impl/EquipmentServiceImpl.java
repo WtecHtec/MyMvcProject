@@ -22,7 +22,7 @@ import com.wf.ew.system.service.DepartmentService;
 @Service
 public class EquipmentServiceImpl  extends ServiceImpl<EquipmentMapper, Equipment> implements EquipmentService{
   
-	private static final org.slf4j.Logger log = LoggerFactory.getLogger(EquipmentController.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(EquipmentServiceImpl.class);
 
 	@Autowired
 	private EquipmentMapper equipmentMapper;

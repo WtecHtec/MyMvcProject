@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wf.ew.system.dao.MeetReservationMapper">
+
+<select id="selectMeetReservations"  parameterType="com.wf.ew.system.model.ex.MeetReservationEx" resultType="com.wf.ew.system.model.ex.MeetReservationEx">
+
+SELECT mr.id, mr.meet_id as meetId, mr.reservation_people as reservationPeople, 
+ DATE_FORMAT(mr.reservation_date,'%Y-%m-%d') as reservationDateStr,
+ mr.reservation_period AS reservationPeriod, mr.`status` as `status`, mr.create_id as createId,room.meeting_room_name as meetingRoomName,
+ mr.content as content, case mr.reservation_period 
+    when 0 then '上午'
+    when 1 then '下午'
+    when 2 then '晚上'
+end  as reservationPeriodStr
+
+FROM meet_reservation mr
+LEFT JOIN meeting_room room ON room.id = mr.meet_id
+where mr.id is not null
+<if test="reservationDateStrStart == null and  reservationDateStr != null and  reservationDateStr !=''">
+AND DATE_FORMAT(mr.reservation_date,'%Y-%m-%d') =  DATE_FORMAT( #{reservationDateStr},'%Y-%m-%d') 
+</if> 
+<if test="reservationDateStrStart != null and  reservationDateStrStart !=''">
+AND DATE_FORMAT(mr.reservation_date,'%Y-%m-%d') between  DATE_FORMAT( #{reservationDateStrStart},'%Y-%m-%d')  and   DATE_FORMAT( #{reservationDateStrEnd},'%Y-%m-%d')
+</if> 
+<if test="reservationPeriod !=null ">
+AND mr.reservation_period = #{reservationPeriod}
+</if>
+<if test="meetId != null">
+AND mr.meet_id = #{meetId}
+</if>
+<if test="status != null">
+AND mr.status = #{status}
+</if>
+ORDER BY mr.reservation_period
+</select>
+
+</mapper>

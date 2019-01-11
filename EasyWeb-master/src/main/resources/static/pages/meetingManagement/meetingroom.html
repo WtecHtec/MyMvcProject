@@ -43,6 +43,17 @@
   <span>{{ d.equipmentNames.split(',')[i] }} ---  {{ d.counts.split(',')[i] }} </span> <br/>
 {{# } }}
 </script>
+
+<!-- 操作 -->
+<script type="text/html" id="operaToolTar">
+    <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="edit">
+ 	 	 <i class="layui-icon layui-icon-edit"></i>
+	</button>
+	<button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="del">
+ 	   <i class="layui-icon layui-icon-delete"></i>
+	</button>
+</script>
+
 <!-- js 部分 -->
 <script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
 <script type="text/javascript" src="../../assets/common.js"></script>
@@ -72,9 +83,41 @@
                  {field: 'meetingRoomName', title: '会议室名称'}
                 ,{field: 'meetingRoomPeoples', title: '容纳人数'}
                 ,{title: '设备', templet: '#equitmentTpl', style:'height: 100px;'}
-                ,{ title: '操作'}
+                ,{ title: '操作', toolbar: '#operaToolTar'}
             ]]
-        });
+        })
+        
+        
+      //监听工具条
+        table.on('tool(meetingRoomTable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+          var data = obj.data; //获得当前行数据
+          var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+          var tr = obj.tr; //获得当前行 tr 的DOM对象
+         console.log(data)
+         if(layEvent === 'del'){ //删除
+            layer.confirm('真的删除行么', function(index){
+              
+              //向服务端发送删除指令
+              admin.req('meetingroom/delMeetRoomById/' + obj.data.meetRoomId, {}, function(res) {
+            	  if(res.code == 200) {
+            		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                      layer.close(index);
+                      layer.msg(res.msg, {icon: 1})
+            	  } else {
+            		  layer.msg(res.msg, {icon: 2})
+            	  }
+            	  
+              }, 'POST' )
+              
+            });
+          } else if(layEvent === 'edit'){ //编辑
+            //do something
+        	  location.replace('meetingroomEdit.html?meetRoomId=12');
+          
+          }
+          
+        })
+        
     })
 </script>
 <style>
